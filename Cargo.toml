@@ -19,7 +19,7 @@ name = "bench"
 [dependencies]
 
 [dev-dependencies]
-criterion = "0.2.11"
+criterion = { version = "0.3.4", features = ["html_reports"] }
 
 [lib]
 bench = false
