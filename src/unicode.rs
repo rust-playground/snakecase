@@ -25,13 +25,13 @@ where
         } else if i > 0 && c == UNDERSCORE_CHAR {
             if let Some((_, c)) = chars.peek() {
                 if c.is_lowercase() {
-                    chars.nth(0);
+                    chars.next();
                     has_lower = true;
                     has_underscore = true;
                     has_lower_since_underscore = true;
                     continue;
                 } else if c.is_numeric() {
-                    chars.nth(0);
+                    chars.next();
                     has_underscore = true;
                     has_lower_since_underscore = false;
                     continue;
@@ -197,12 +197,7 @@ mod tests {
         false
     );
     snakecase_test!(camel_case, "CStringRef", "cstring_ref", false);
-    snakecase_test!(
-        unicode_mixed,
-        "ẞ•¶§ƒ˚foo˙∆˚¬",
-        "ß_ƒ_foo",
-        false
-    );
+    snakecase_test!(unicode_mixed, "ẞ•¶§ƒ˚foo˙∆˚¬", "ß_ƒ_foo", false);
     snakecase_test!(unicode_uppercase, "ẞ", "ß", false); // capitol unicode german to lowercase
     snakecase_test!(
         special_chars_long,

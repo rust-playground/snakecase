@@ -7,10 +7,8 @@
 //! ```rust
 //! use snakecase::ascii::to_snakecase;
 //!
-//! fn main() {
 //!     let input = "sample text";
 //!     println!("{} => {}", input, to_snakecase(input));
-//! }
 //! ```
 //!
 //! or when you need unicode support
@@ -18,10 +16,8 @@
 //! ```rust
 //! use snakecase::unicode::to_snakecase;
 //!
-//! fn main() {
 //!     let input = "ƒun sample text";
 //!     println!("{} => {}", input, to_snakecase(input));
-//! }
 //! ```
 //!
 

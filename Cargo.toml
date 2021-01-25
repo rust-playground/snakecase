@@ -3,14 +3,11 @@ authors = ["Dean Karn <dean.karn@gmail.com>"]
 license = "MIT OR Apache-2.0"
 edition = "2018"
 name = "snakecase"
-version = "0.1.0"
+version = "0.2.0"
 description = "Snakecase is a general purpose snakecase implementation supporting both ascii and unicode."
 repository = "https://github.com/rust-playground/snakecase"
 readme = "README.md"
 keywords = ["snakecase"]
-
-[badges]
-travis-ci = { repository = "go-playground/snakecase" }
 
 [[bench]]
 harness = false
@@ -19,7 +16,7 @@ name = "bench"
 [dependencies]
 
 [dev-dependencies]
-criterion = "0.2.11"
+criterion = { version = "0.3.4", features = ["html_reports"] }
 
 [lib]
 bench = false

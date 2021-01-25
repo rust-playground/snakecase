@@ -1,56 +1,66 @@
 #[macro_use]
 extern crate criterion;
 
-use criterion::{Benchmark, Criterion, Throughput};
+use criterion::{BenchmarkId, Criterion, Throughput};
 use snakecase::ascii::to_snakecase as to_snakecase_ascii;
 use snakecase::unicode::to_snakecase as to_snakecase_unicode;
 
-fn criterion_benchmark(c: &mut Criterion) {
-    macro_rules! snakecase_ascii_bench {
-        ($name:expr,$s:expr) => {
-            c.bench(
-                "ascii",
-                Benchmark::new($name, |b| b.iter(|| to_snakecase_ascii($s)))
-                    .throughput(Throughput::Bytes($s.as_bytes().len() as u32)),
-            );
-        };
-    }
-    snakecase_ascii_bench!("ascii_owned_simple", "sample text");
-    snakecase_ascii_bench!("ascii_borrowed_simple", "sample_text");
-    snakecase_ascii_bench!("ascii_owned_long", "inviteYourCustomersAddInvites");
-    snakecase_ascii_bench!("ascii_borrowed_long", "invite_your_customers_add_invites");
-    snakecase_ascii_bench!(
-        "ascii_owned_long_special_chars",
-        "FOO:BAR$BAZ__Sample    Text___"
-    );
-    snakecase_ascii_bench!("ascii_owned_unicode", "ẞ•¶§ƒ˚foo˙∆˚¬");
-    snakecase_ascii_bench!("ascii_borrowed_unicode", "ß_ƒ_foo");
-    snakecase_ascii_bench!("ascii_digit_uppercase", "5TEst");
-    snakecase_ascii_bench!("ascii_starts_with_garbage", "@%#&5TEst");
-    snakecase_ascii_bench!("ascii_complex_random", "lk0B@bFmjrLQ_Z6YL");
+fn bench_ascii(c: &mut Criterion) {
+    let mut group = c.benchmark_group("ascii");
 
-    macro_rules! snakecase_bench {
-        ($name:expr,$s:expr) => {
-            c.bench(
-                "unicode",
-                Benchmark::new($name, |b| b.iter(|| to_snakecase_unicode($s)))
-                    .throughput(Throughput::Bytes($s.as_bytes().len() as u32)),
-            );
-        };
+    for (name, input) in [
+        ("ascii_owned_simple", "sample text"),
+        ("ascii_borrowed_simple", "sample_text"),
+        ("ascii_owned_long", "inviteYourCustomersAddInvites"),
+        ("ascii_borrowed_long", "invite_your_customers_add_invites"),
+        (
+            "ascii_owned_long_special_chars",
+            "FOO:BAR$BAZ__Sample    Text___",
+        ),
+        ("ascii_owned_unicode", "ẞ•¶§ƒ˚foo˙∆˚¬"),
+        ("ascii_borrowed_unicode", "ß_ƒ_foo"),
+        ("ascii_digit_uppercase", "5TEst"),
+        ("ascii_starts_with_garbage", "@%#&5TEst"),
+        ("ascii_complex_random", "lk0B@bFmjrLQ_Z6YL"),
+    ]
+    .iter()
+    {
+        group.throughput(Throughput::Bytes(input.len() as u64));
+        group.bench_with_input(BenchmarkId::new(*name, input), input, |b, input| {
+            b.iter(|| to_snakecase_ascii(*input))
+        });
     }
-    snakecase_bench!("unicode_owned_simple", "sample text");
-    snakecase_bench!("unicode_borrowed_simple", "sample_text");
-    snakecase_bench!("unicode_borrowed_long", "invite_your_customers_add_invites");
-    snakecase_bench!(
-        "unicode_owned_long_special_chars",
-        "FOO:BAR$BAZ__Sample    Text___"
-    );
-    snakecase_bench!("unicode_owned_unicode", "ẞ•¶§ƒ˚foo˙∆˚¬");
-    snakecase_bench!("unicode_borrowed_unicode", "ß_ƒ_foo");
-    snakecase_bench!("unicode_digit_uppercase", "5TEst");
-    snakecase_bench!("unicode_starts_with_garbage", "@%#&5TEst");
-    snakecase_bench!("unicode_complex_random", "lk0B@bFmjrLQ_Z6YL");
+
+    group.finish();
 }
 
-criterion_group!(benches, criterion_benchmark);
+fn bench_unicode(c: &mut Criterion) {
+    let mut group = c.benchmark_group("unicode");
+
+    for (name, input) in [
+        ("unicode_owned_simple", "sample text"),
+        ("unicode_borrowed_simple", "sample_text"),
+        ("unicode_borrowed_long", "invite_your_customers_add_invites"),
+        (
+            "unicode_owned_long_special_chars",
+            "FOO:BAR$BAZ__Sample    Text___",
+        ),
+        ("unicode_owned_unicode", "ẞ•¶§ƒ˚foo˙∆˚¬"),
+        ("unicode_borrowed_unicode", "ß_ƒ_foo"),
+        ("unicode_digit_uppercase", "5TEst"),
+        ("unicode_starts_with_garbage", "@%#&5TEst"),
+        ("unicode_complex_random", "lk0B@bFmjrLQ_Z6YL"),
+    ]
+    .iter()
+    {
+        group.throughput(Throughput::Bytes(input.len() as u64));
+        group.bench_with_input(BenchmarkId::new(*name, input), input, |b, input| {
+            b.iter(|| to_snakecase_unicode(*input))
+        });
+    }
+
+    group.finish();
+}
+
+criterion_group!(benches, bench_ascii, bench_unicode);
 criterion_main!(benches);
