@@ -1,7 +1,6 @@
-# Snakecase &emsp; [![Build Status]][travis] [![Latest Version]][crates.io]
+# Snakecase &emsp; ![Build Status] [![Latest Version]][crates.io]
 
-[Build Status]: https://api.travis-ci.org/rust-playground/snakecase.svg?branch=master
-[travis]: https://travis-ci.org/rust-playground/snakecase
+[Build Status]: https://github.com/rust-playground/snakecase/workflows/Lint%20&%20Test/badge.svg 
 [Latest Version]: https://img.shields.io/crates/v/snakecase.svg
 [crates.io]: https://crates.io/crates/snakecase
 

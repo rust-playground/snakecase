@@ -9,9 +9,6 @@ repository = "https://github.com/rust-playground/snakecase"
 readme = "README.md"
 keywords = ["snakecase"]
 
-[badges]
-travis-ci = { repository = "go-playground/snakecase" }
-
 [[bench]]
 harness = false
 name = "bench"
